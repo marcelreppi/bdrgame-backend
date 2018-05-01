@@ -1,5 +1,5 @@
 const PlayerDAO = require('../PlayerDAO')
-
+const inform = require('../informWebServer')
 exports.getAllPlayers = (req, res) => {
   res.json(PlayerDAO.getAllPlayers())
 }
@@ -62,7 +62,8 @@ exports.movePlayer = (req, res) => {
   }
 
   if (PlayerDAO.updatePlayerPos(id, x, y)) {
-      res.end('Position updated');
+      inform.sendPlayerMoved({playerId: id, x: x, y: y})
+      res.end('Request sucessful');
       return;
   } else {
     res.status(400).end('Error')

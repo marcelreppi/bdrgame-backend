@@ -25,8 +25,11 @@ exports.getAllTokens = () => {
 }
 
 exports.createToken = (x, y, connectors) => {
-  const newToken = new Token(x, y, connectors) 
+  const newToken = new Token(x, y, connectors)
   tokens.push(newToken)
+
+  require('./informWebServer').sendNewToken(newToken);
+
   return newToken
 }
 

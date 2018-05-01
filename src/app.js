@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 
 const routes = require('./routes')
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 const PlayerDAO = require('./PlayerDAO')
 const TokenDAO = require('./TokenDAO')
@@ -16,7 +16,7 @@ app.use('/', routes)
 app.listen(PORT, () => console.log('Started'));
 
 // Test Data
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 10; i++) {
   TokenDAO.createToken(Math.random(), Math.random())
 }
 

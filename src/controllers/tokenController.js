@@ -57,6 +57,14 @@ exports.connectConnector = (req, res) => {
     return
   }
 
+  require('./informWebServer').sendNewEdges({
+    playerId:playerId,
+    tokenId1:tokenId1,
+    connectorId1:connectorId1,
+    tokenId2:tokenId2,
+    connectorId2:connectorId2
+  });
+
   // TODO: Maybe check other things
 
   c1.isConnected = true;
