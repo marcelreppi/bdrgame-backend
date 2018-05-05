@@ -1,5 +1,7 @@
 const PlayerDAO = require('../PlayerDAO')
 const inform = require('../informWebServer')
+const app = require('../app.js')
+
 exports.getAllPlayers = (req, res) => {
   res.json(PlayerDAO.getAllPlayers())
 }
@@ -60,12 +62,6 @@ exports.movePlayer = (req, res) => {
     res.status(400).end('One Parameter is empty');
     return;
   }
-
-  if (PlayerDAO.updatePlayerPos(id, x, y)) {
-      inform.sendPlayerMoved({playerId: id, x: x, y: y})
-      res.end('Request sucessful');
-      return;
-  } else {
-    res.status(400).end('Error')
-  }
+  app.moves.push({id: id, x: x, y: y});
+  res.end('Request sucessful');
 }
