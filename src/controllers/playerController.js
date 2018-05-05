@@ -62,6 +62,6 @@ exports.movePlayer = (req, res) => {
     res.status(400).end('One Parameter is empty');
     return;
   }
-  app.moves.push({playerId: id, x: x, y: y});
+  app.moves.push({playerId: id, id: id, x: x, y: y});
   res.end('Request sucessful');
 }
