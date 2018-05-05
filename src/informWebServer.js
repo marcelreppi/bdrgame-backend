@@ -14,7 +14,7 @@ sendNewEdges({
 
 exports.sendNewEdges = function (edge) {
   // define web server address
-  axios.post(require('./app').WEB_SERVER_ADDRESS + '/edges', edge).
+  axios.post(WEB_SERVER_ADDRESS + '/edges', edge).
     then((response) => {
       //console.log(response)
       console.log('got a response')
@@ -32,7 +32,7 @@ sendNewEdges({
 */
 exports.sendPlayerMoved = function (playerPos) {
   // define web server address
-  axios.post(require('./app').WEB_SERVER_ADDRESS + '/players', playerPos
+  axios.post(WEB_SERVER_ADDRESS + '/players/move', playerPos
   ).then((response) => {
       //console.log(response)
       console.log('got a response')
@@ -43,7 +43,7 @@ exports.sendPlayerMoved = function (playerPos) {
 
 exports.sendNewToken = function (newToken) {
   // define web server address
-  axios.post(require('./app').WEB_SERVER_ADDRESS + '/tokens', newToken).
+  axios.post(WEB_SERVER_ADDRESS + '/tokens', newToken).
     then((response) => {
       //console.log(response)
       console.log('got a response')
