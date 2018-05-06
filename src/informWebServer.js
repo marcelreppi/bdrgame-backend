@@ -1,5 +1,5 @@
 let axios = require('axios')
-const WEB_SERVER_ADDRESS = 'http://bdrgame.herokuapp.com'
+const WEB_SERVER_ADDRESS = 'http://bdrgame-web.herokuapp.com'
 // const WEB_SERVER_ADDRESS = 'http://localhost:8000'
 
 /*
