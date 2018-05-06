@@ -16,6 +16,9 @@ exports.addMoveToQueue = function(id, x, y) {
 }
 
 function gameTick() {
+  // Execute moves from previous rounds
+  executeMoves()
+
   console.log('GameTick');
   let players = PlayerDAO.getAllPlayers()
   for (let i = 0; i < players.length; i++) {
@@ -23,11 +26,30 @@ function gameTick() {
     p.balance += 1;
   }
 
-  // generate a new token every round
-  const newToken = TokenDAO.createToken(Math.random(), Math.random());
-  webserver.sendNewToken(newToken);
+  // Pre-round actions
+  // 1. Pay payoff
+  // TODO
 
-  executeMoves()
+  // 2. Generate tokens
+  const k = 1 // base number of generated tokens
+  const s = PlayerDAO.getAllPlayers().length // total amount of players
+  const x = 0.95 // base probability
+  const beta = 0.2 // curve parameter
+  const probability = Math.pow(1 - Math.pow(x, s), beta)
+
+  const r = Math.random()
+  if (r <= probability) {
+    const newTokens = []
+    for (let i = 0; i < k*s; i++) {
+      const newToken = TokenDAO.createToken(Math.random(), Math.random());
+      newTokens.push(newToken)
+    }
+    webserver.sendNewTokens(newTokens);
+  }
+
+  // 3. Add players to the game   
+
+  
 }
 
 function executeMoves() {
