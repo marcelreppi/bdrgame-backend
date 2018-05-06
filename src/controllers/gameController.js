@@ -3,7 +3,7 @@ const TokenDAO = require('../TokenDAO')
 
 const webserver = require('../informWebServer')
 
-const ROUND_DURATION = 500
+const ROUND_DURATION = 5000
 
 let moveQueue = []
 
