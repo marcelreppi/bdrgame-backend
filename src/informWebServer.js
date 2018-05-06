@@ -25,8 +25,8 @@ exports.sendNewEdges = function (edge) {
 }
 
 /*
-sendNewEdges({
-  playerID: playerID,
+sendPlayerMoved({
+  id: playerID,
   x: x,
   y: y,
 });

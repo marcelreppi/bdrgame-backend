@@ -37,6 +37,13 @@ function gameTick() {
   const beta = 0.2 // curve parameter
   const probability = Math.pow(1 - Math.pow(x, s), beta)
 
+  // REMOVE LATER
+  // ONLY FOR DEVELOPMENT
+  // PREVENT TOO MANY TOKENS WHILE CONSTANTLY RUNNING
+  if (TokenDAO.getAllTokens().length > 1000) {
+    TokenDAO.wipeTokens()
+  }
+
   const r = Math.random()
   if (r <= probability) {
     const newTokens = []

@@ -24,6 +24,10 @@ exports.getAllTokens = () => {
   return tokens;
 }
 
+exports.wipeTokens = () => {
+  tokens = []
+}
+
 exports.createToken = (x, y, connectors) => {
   connectors = []
   for (let i = 0; i < 6; i++) {
