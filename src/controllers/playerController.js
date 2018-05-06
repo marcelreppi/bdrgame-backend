@@ -1,6 +1,5 @@
 const PlayerDAO = require('../PlayerDAO')
-const inform = require('../informWebServer')
-const app = require('../app.js')
+const gameController = require('./gameController')
 
 exports.getAllPlayers = (req, res) => {
   res.json(PlayerDAO.getAllPlayers())
@@ -62,6 +61,6 @@ exports.movePlayer = (req, res) => {
     res.status(400).end('One Parameter is empty');
     return;
   }
-  app.moves.push({playerId: id, id: id, x: x, y: y});
+  gameController.addMoveToQueue(id, x, y)
   res.end('Request sucessful');
 }
