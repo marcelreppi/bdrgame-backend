@@ -42,9 +42,9 @@ exports.sendPlayerMoved = function (playerPos) {
     });
 }
 
-exports.sendNewToken = function (newToken) {
+exports.sendNewTokens = function (newTokens) {
   // define web server address
-  axios.post(WEB_SERVER_ADDRESS + '/tokens', newToken).
+  axios.post(WEB_SERVER_ADDRESS + '/tokens', newTokens).
     then((response) => {
       //console.log(response)
       // console.log('got a response')
