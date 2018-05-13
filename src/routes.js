@@ -10,6 +10,8 @@ router.get('/tokens/:tokenId', tokenController.getTokenById)
 router.get('/tokens/:tokenId/connectors', tokenController.getAllConnectorsByToken)
 router.get('/tokens/:tokenId/connectors/connectorId', tokenController.getConnectorByToken)
 
+router.get('/connections', tokenController.getAllConnections)
+
 router.get('/players', playerController.getAllPlayers)
 router.post('/players', playerController.createPlayer)
 router.get('/players/:playerId', playerController.getPlayerById)

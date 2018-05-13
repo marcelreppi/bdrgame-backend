@@ -3,52 +3,50 @@ const WEB_SERVER_ADDRESS = 'http://bdrgame-web.herokuapp.com'
 // const WEB_SERVER_ADDRESS = 'http://localhost:8000'
 
 /*
-sendNewEdges({
-  playerId: playerId,
-  tokenId1: tokenId1,
-  tokenId2: tokenId2,
-  connectorId1: connectorId1,
-  connectorId2: connectorId2
-});
+sendNewConnections([{
+  playerId
+  tokenId
+  connectorId
+  oppositeTokenId
+  oppositeConnectorId
+}]);
 */
 
 
-exports.sendNewEdges = function (edge) {
+exports.sendNewConnections = function (connections) {
   // define web server address
-  axios.post(WEB_SERVER_ADDRESS + '/edges', edge).
-    then((response) => {
-      //console.log(response)
-      console.log('got a response')
-    }).catch((err) => {
+  axios.post(WEB_SERVER_ADDRESS + '/tokens/connect', connections)
+    .catch((err) => {
       console.log(err.code + ' - Cannot send new token information to webserver');
     });
 }
 
 /*
-sendPlayerMoved({
+sendPlayerMoves([{
   id: playerID,
   x: x,
   y: y,
-});
+}]);
 */
-exports.sendPlayerMoved = function (playerPos) {
+exports.sendPlayerMoves = function (moves) {
   // define web server address
-  axios.post(WEB_SERVER_ADDRESS + '/players/move', playerPos
-  ).then((response) => {
-      //console.log(response)
-      // console.log('got a response')
-    }).catch((err) => {
+  axios.post(WEB_SERVER_ADDRESS + '/players/move', moves)
+    .catch((err) => {
       console.log(err.code + ' - Cannot send playermove information to webserver');
     });
 }
 
 exports.sendNewTokens = function (newTokens) {
   // define web server address
-  axios.post(WEB_SERVER_ADDRESS + '/tokens', newTokens).
-    then((response) => {
-      //console.log(response)
-      // console.log('got a response')
-    }).catch((err) => {
+  axios.post(WEB_SERVER_ADDRESS + '/tokens', newTokens)
+    .catch((err) => {
       console.log(err.code + ' - Cannot send new token information to webserver');
+    });
+}
+
+exports.sendUpdatedTokens = function (updatedTokens) {
+  axios.put(WEB_SERVER_ADDRESS + '/tokens', updatedTokens)
+    .catch((err) => {
+      console.log(err.code + ' - Cannot send updated token information to webserver');
     });
 }

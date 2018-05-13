@@ -48,11 +48,11 @@ exports.updatePlayerBalance = (req, res) => {
 }
 
 exports.movePlayer = (req, res) => {
-  let id = parseFloat(req.params.playerId);
+  let playerId = parseFloat(req.params.playerId);
   let x = req.body.x;
   let y = req.body.y;
 
-  if (id === undefined) {
+  if (playerId === undefined) {
     res.status(404).end('No Player with this id found');
     return
   }
@@ -61,6 +61,6 @@ exports.movePlayer = (req, res) => {
     res.status(400).end('One Parameter is empty');
     return;
   }
-  gameController.addMoveToQueue(id, x, y)
+  gameController.addMoveToQueue(playerId, x, y)
   res.end('Request sucessful');
 }

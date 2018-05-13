@@ -6,20 +6,35 @@ const webserver = require('../informWebServer')
 const ROUND_DURATION = 5000
 
 let moveQueue = []
+let connectionQueue = []
+let updatedTokens = []
 
 exports.startGame = function() {
+  gameTick()
   setInterval(gameTick, ROUND_DURATION);
 }
 
-exports.addMoveToQueue = function(id, x, y) {
-  moveQueue.push({ id, x, y })
+exports.addUpdatedToken = (token) => {
+  updatedTokens.push(token)
 }
 
+exports.addMoveToQueue = function(playerId, x, y) {
+  moveQueue.push({ playerId, x, y })
+}
+
+exports.addConnectionToQueue = function(connection) {
+  connectionQueue.push(connection)
+}
+
+let tickCounter = 0
 function gameTick() {
   // Execute moves from previous rounds
   executeMoves()
+  executeConnections()
+  sendUpdatedTokens()
 
-  console.log('GameTick');
+  console.log('GameTick ' + tickCounter);
+  tickCounter++
   let players = PlayerDAO.getAllPlayers()
   for (let i = 0; i < players.length; i++) {
     let p = players[i];
@@ -65,16 +80,36 @@ function executeMoves() {
   let allowedMoves = [];
   for (let k = 0; k < moveQueue.length; k++) {
     let move = moveQueue[k];
-    if (!(ids.includes(move.id)))
+    if (!(ids.includes(move.playerId)))
       allowedMoves.push(move);
   }
 
   // TODO: filter conflicting moves
   for (let k = 0; k < allowedMoves.length; k++) {
     let move = allowedMoves[k]
-    console.log('Sending move ' + JSON.stringify(move) + ' to the server')
-    PlayerDAO.updatePlayerPos(move.id, move.x, move.y);
-    webserver.sendPlayerMoved(move);
+    PlayerDAO.updatePlayerPos(move.playerId, move.x, move.y);
   }
+  webserver.sendPlayerMoves(allowedMoves);
   moveQueue = []
+}
+
+function executeConnections() {
+  console.log('executeConnections')
+  // TODO add logic
+  const allowedConnections = []
+  for( let i = 0; i < connectionQueue.length; i++ ) {
+    const connection = connectionQueue[i]
+    // TODO add logic
+    TokenDAO.addConnection(connection)
+    allowedConnections.push(connection)
+    updatedTokens.push(TokenDAO.getTokenById(connection.tokenId))
+    updatedTokens.push(TokenDAO.getTokenById(connection.oppositeTokenId))
+  }
+  webserver.sendNewConnections(allowedConnections)
+  connectionQueue = []
+}
+
+function sendUpdatedTokens() {
+  webserver.sendUpdatedTokens(updatedTokens)
+  updatedTokens = []
 }

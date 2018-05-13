@@ -1,7 +1,12 @@
 const TokenDAO = require('../TokenDAO')
+const gameController = require('./gameController')
 
 exports.getAllTokens = (req, res) => {
   res.json(TokenDAO.getAllTokens())
+}
+
+exports.getAllConnections = (req, res) => {
+  res.json(TokenDAO.getAllConnections())
 }
 
 exports.getTokenById = (req, res) => {
@@ -38,43 +43,28 @@ exports.getConnectorByToken = (req, res) => {
 }
 
 exports.connectConnector = (req, res) => {
-  const { playerId, tokenId1, connectorId1, tokenId2, connectorId2 } = req.body;
-  if (playerId === undefined || connectorId1 === undefined || id2 === undefined || tokenId2 === undefined || tokenId1 === undefined) {
+  const { playerId, tokenId, connectorId, oppositeTokenId, oppositeConnectorId } = req.body;
+  if (playerId === undefined || tokenId === undefined || connectorId === undefined || oppositeTokenId === undefined || oppositeConnectorId === undefined) {
     res.status(400).end('One Parameter is empty');
     return
   }
 
-  if (tokenId1 === tokenId2) {
+  if (tokenId === oppositeTokenId) {
     res.status(400).end('Can not connect connectors within one token')
     return
   }
 
-  const c1 = TokenDAO.getConnectorByTokenId(tokenId1, connectorId1)
-  const c2 = TokenDAO.getConnectorByTokenId(tokenId2, connectorId2)
+  const c1 = TokenDAO.getConnectorByTokenId(tokenId, connectorId)
+  const c2 = TokenDAO.getConnectorByTokenId(oppositeTokenId, oppositeConnectorId)
 
   if (c1.isConnected || c2.isConnected) {
     res.status(400).end('One of connectors is already connected')
     return
   }
 
-  require('./informWebServer').sendNewEdges({
-    playerId:playerId,
-    tokenId1:tokenId1,
-    connectorId1:connectorId1,
-    tokenId2:tokenId2,
-    connectorId2:connectorId2
-  });
-
   // TODO: Maybe check other things
-
-  c1.isConnected = true;
-  c2.isConnected = true;
-  c1.oppositeTokenId = tokenId2;
-  c2.oppositeTokenId = tokenId1;
-  c1.oppositeConnectorId = connectorId2;
-  c2.oppositeConnectorId = connectorId1;
-  c1.connectingPlayerId = playerId;
-  c1.connectingPlayerId = playerId;
-
-  res.end('Connected');
+  
+  const connection = TokenDAO.createConnection(playerId, tokenId, connectorId, oppositeTokenId, oppositeConnectorId)
+  gameController.addConnectionToQueue(connection)
+  res.end();
 }

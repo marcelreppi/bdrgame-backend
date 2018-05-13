@@ -18,7 +18,16 @@ function Connector(id, regex, payoff) {
   this.connectingPlayerId = undefined
 }
 
+function Connection(playerId, tokenId, connectorId, oppositeTokenId, oppositeConnectorId) {
+  this.playerId = playerId
+  this.tokenId = tokenId
+  this.connectorId = connectorId
+  this.oppositeTokenId = oppositeTokenId
+  this.oppositeConnectorId = oppositeConnectorId
+}
+
 let tokens = [];
+let connections = []
 
 exports.getAllTokens = () => {
   return tokens;
@@ -65,11 +74,34 @@ exports.getConnectorByTokenId = (tokenId, connectorId) => {
         const c = t.connectors[j]
         if (c.id === connectorId) {
           return c
-        } else {
-          return undefined
         }
       }
     }
   }
   return undefined;
+}
+
+exports.getAllConnections = () => {
+  return connections
+}
+
+exports.createConnection = (playerId, tokenId, connectorId, oppositeTokenId, oppositeConnectorId) => {
+  return new Connection(playerId, tokenId, connectorId, oppositeTokenId, oppositeConnectorId)
+}
+
+exports.addConnection = (connection) => {
+  const { playerId, tokenId, connectorId, oppositeTokenId, oppositeConnectorId } = connection
+  const c1 = this.getConnectorByTokenId(tokenId, connectorId)
+  const c2 = this.getConnectorByTokenId(oppositeTokenId, oppositeConnectorId)
+
+  c1.isConnected = true;
+  c2.isConnected = true;
+  c1.oppositeTokenId = oppositeTokenId;
+  c2.oppositeTokenId = tokenId;
+  c1.oppositeConnectorId = oppositeConnectorId;
+  c2.oppositeConnectorId = connectorId;
+  c1.connectingPlayerId = playerId;
+  c2.connectingPlayerId = playerId;
+
+  connections.push(connection)
 }
