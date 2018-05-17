@@ -50,3 +50,10 @@ exports.sendUpdatedTokens = function (updatedTokens) {
       console.log(err.code + ' - Cannot send updated token information to webserver');
     });
 }
+
+exports.notifyNewRound = function () {
+  axios.post(WEB_SERVER_ADDRESS + '/rounds')
+    .catch((err) => {
+      console.log(err.code + ' - Cannot notify webserver');
+    });
+}

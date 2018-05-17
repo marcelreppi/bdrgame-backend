@@ -3,6 +3,7 @@ const router = express.Router()
 
 const playerController = require('./controllers/playerController')
 const tokenController = require('./controllers/tokenController')
+const gameController = require('./controllers/gameController')
 
 router.get('/tokens', tokenController.getAllTokens)
 router.post('/tokens/connect', tokenController.connectConnector)
@@ -17,5 +18,7 @@ router.post('/players', playerController.createPlayer)
 router.get('/players/:playerId', playerController.getPlayerById)
 router.put('/players/:playerId/balance', playerController.updatePlayerBalance)
 router.put('/players/:playerId/move', playerController.movePlayer)
+
+router.get('/time', gameController.getRoundTime)
 
 module.exports = router

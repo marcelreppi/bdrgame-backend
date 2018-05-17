@@ -3,7 +3,8 @@ const TokenDAO = require('../TokenDAO')
 
 const webserver = require('../informWebServer')
 
-const ROUND_DURATION = 5000
+const ROUND_DURATION = 15000
+let roundTime = ROUND_DURATION / 1000
 
 let moveQueue = []
 let connectionQueue = []
@@ -12,6 +13,11 @@ let updatedTokens = []
 exports.startGame = function() {
   gameTick()
   setInterval(gameTick, ROUND_DURATION);
+  setInterval(() => {
+    if (roundTime > 0) {
+      roundTime -= 1
+    }
+  }, 1000)
 }
 
 exports.addUpdatedToken = (token) => {
@@ -71,7 +77,9 @@ function gameTick() {
 
   // 3. Add players to the game   
 
-  
+  // Start new round
+  webserver.notifyNewRound()
+  roundTime = (ROUND_DURATION / 1000) + 1
 }
 
 function executeMoves() {
@@ -84,13 +92,17 @@ function executeMoves() {
       allowedMoves.push(move);
   }
 
+  moveQueue = []
+  if (allowedMoves.length === 0) {
+    return
+  }
+
   // TODO: filter conflicting moves
   for (let k = 0; k < allowedMoves.length; k++) {
     let move = allowedMoves[k]
     PlayerDAO.updatePlayerPos(move.playerId, move.x, move.y);
   }
   webserver.sendPlayerMoves(allowedMoves);
-  moveQueue = []
 }
 
 function executeConnections() {
@@ -105,11 +117,23 @@ function executeConnections() {
     updatedTokens.push(TokenDAO.getTokenById(connection.tokenId))
     updatedTokens.push(TokenDAO.getTokenById(connection.oppositeTokenId))
   }
-  webserver.sendNewConnections(allowedConnections)
+
   connectionQueue = []
+  if (allowedConnections.length === 0) {
+    return
+  }
+  webserver.sendNewConnections(allowedConnections)
 }
 
 function sendUpdatedTokens() {
+  if (updatedTokens.length === 0) {
+    return
+  }
   webserver.sendUpdatedTokens(updatedTokens)
   updatedTokens = []
+}
+
+
+exports.getRoundTime = (req, res) => {
+  res.json({ roundTime, roundDuration: ROUND_DURATION })
 }
