@@ -3,7 +3,7 @@ const TokenDAO = require('../TokenDAO')
 
 const webserver = require('../informWebServer')
 
-const ROUND_DURATION = 15000
+const ROUND_DURATION = 5000
 let roundTime = ROUND_DURATION / 1000
 
 let moveQueue = []
@@ -48,7 +48,8 @@ function gameTick() {
   }
 
   // Pre-round actions
-  // 1. Pay payoff
+  // 1. Pay payoff and notify webserver that player details have changed
+  // send updated players as array as PUT to path /players
   // TODO
 
   // 2. Generate tokens
