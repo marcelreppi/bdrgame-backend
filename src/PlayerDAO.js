@@ -4,6 +4,7 @@ function Player(x, y) {
   this.x = x,
   this.y = y,
   this.balance = 0
+  this.isSelected = false
 }
 
 let players = [];
@@ -14,7 +15,7 @@ exports.updatePlayerPos = (playerID, x, y) => {
     if (p.id === playerID)
       p.x = x;
       p.y = y;
-      return true;
+      return p;
   }
   return false;
 }
@@ -24,9 +25,20 @@ exports.setBalance = (playerID, newBalance) => {
     let p = players[i];
     if (p.id === playerID)
       p.balance = newBalance;
-      return true;
+      return p;
   }
   return false;
+}
+
+exports.setSelectPlayer = (playerId, value) => {
+  for (let i = 0; i < players.length; i++) {
+    let p = players[i];
+    if (p.id === playerId) {
+      p.isSelected = value
+      return p
+    }
+  }
+  return false
 }
 
 exports.createPlayer = (x, y) => {
@@ -38,8 +50,9 @@ exports.createPlayer = (x, y) => {
 exports.getPlayerById = (id) => {
   for (let i = 0; i < players.length; i++) {
     let p = players[i];
-    if (p.id === id)
+    if (p.id === id) {
       return p;
+    }
   }
   return undefined;
 }
