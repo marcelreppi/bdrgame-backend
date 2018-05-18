@@ -7,8 +7,8 @@ exports.getAllPlayers = (req, res) => {
 
 exports.getPlayerById = (req, res) => {
   // TODO: Validation
-  const id = req.params.playerId
-  const player = PlayerDAO.getPlayerById(id)
+  const playerId = parseFloat(req.params.playerId)
+  const player = PlayerDAO.getPlayerById(playerId)
   if (player) {
     res.status(200).json(player)
   } else {
@@ -18,9 +18,32 @@ exports.getPlayerById = (req, res) => {
 
 exports.createPlayer = (req, res) => {
   // TODO: Validate this
-  // Maybe randomize starting position of new player
-  const newPlayer = PlayerDAO.createPlayer(req.body.x, req.body.y);
-  res.status(204).json(newPlayer)
+  // Maybe randomize starting position of new player -> NO check description -> players are placed like tokens
+
+  const x = req.body.x || Math.random()
+  const y = req.body.y || Math.random()
+  const newPlayer = PlayerDAO.createPlayer(x, y);
+  res.json(newPlayer)
+}
+
+exports.selectPlayer = (req, res) => {
+  const playerId = parseFloat(req.params.playerId)
+  const updatedPlayer = PlayerDAO.setSelectPlayer(playerId, true)
+  if (!updatedPlayer) {
+    res.status(400).end('Selection failed')
+    return
+  }
+  res.json(updatedPlayer)
+}
+
+exports.unselectPlayer = (req, res) => {
+  const playerId = parseFloat(req.params.playerId)
+  const updatedPlayer = PlayerDAO.setSelectPlayer(playerId, false)
+  if (!updatedPlayer) {
+    res.status(400).end('Unselection failed')
+    return
+  }
+  res.json(updatedPlayer)
 }
 
 exports.updatePlayerBalance = (req, res) => {
