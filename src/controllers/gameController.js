@@ -130,7 +130,7 @@ function payPayoff() {
   console.log("payPayOff");
   console.log("connectionQueue: " + connectionQueue);
   let players = [];
-  for (let i = 0; i < connectionQueue; i++)  {
+  for (let i = 0; i < connectionQueue.length; i++)  {
     let connection = connectionQueue[i];
     let player = PlayerDAO.getPlayerById(connection.playerId);
     players.push(player);
