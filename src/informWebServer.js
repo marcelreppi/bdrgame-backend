@@ -57,3 +57,9 @@ exports.notifyNewRound = function () {
       console.log(err.code + ' - Cannot notify webserver');
     });
 }
+exports.sendUpdatedPlayers = function (players) {
+  axios.put(WEB_SERVER_ADDRESS + '/players', players)
+    .catch((err) => {
+      console.log(err.code + ' - Cannot send updated players information to webserver');
+    });
+}

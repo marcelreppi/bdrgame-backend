@@ -41,11 +41,12 @@ function gameTick() {
 
   console.log('GameTick ' + tickCounter);
   tickCounter++
-  let players = PlayerDAO.getAllPlayers()
-  for (let i = 0; i < players.length; i++) {
-    let p = players[i];
-    p.balance += 1;
-  }
+  //let players = PlayerDAO.getAllPlayers()
+  //for (let i = 0; i < players.length; i++) {
+  //  let p = players[i];
+  //  p.balance += 1;
+  //}
+  payPayoff()
 
   // Pre-round actions
   // 1. Pay payoff and notify webserver that player details have changed
@@ -124,6 +125,20 @@ function executeConnections() {
     return
   }
   webserver.sendNewConnections(allowedConnections)
+}
+function payPayoff() {
+  // payoff for connecting
+  let players = [];
+  for (let i = 0; i < connectionQueue; i++)  {
+    let connection = connectionQueue[i];
+    let player = PlayerDAO.getPlayerById(connection.playerId);
+    players.push(player);
+    let payOff1 = TokenDaO.getConnectorByTokenId(connection.tokenId, connection.connectorId).payoff;
+    let payOff2 = TokenDAO.getConnectorByTokenId(connection.oppositeTokenId, connection.oppositeConnectorId).payoff;
+    p.balance += payOff1 + payOff2;
+  }
+  if (players.length > 0)
+    webserver.sendUpdatedPlayers(players);
 }
 
 function sendUpdatedTokens() {
