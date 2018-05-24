@@ -120,7 +120,6 @@ function executeConnections() {
     updatedTokens.push(TokenDAO.getTokenById(connection.oppositeTokenId))
   }
 
-  connectionQueue = []
   if (allowedConnections.length === 0) {
     return
   }
@@ -139,6 +138,7 @@ function payPayoff() {
   }
   if (players.length > 0)
     webserver.sendUpdatedPlayers(players);
+  connectionQueue = []
 }
 
 function sendUpdatedTokens() {
