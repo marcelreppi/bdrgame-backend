@@ -134,7 +134,7 @@ function payPayoff() {
     let connection = connectionQueue[i];
     let player = PlayerDAO.getPlayerById(connection.playerId);
     players.push(player);
-    let payOff1 = TokenDaO.getConnectorByTokenId(connection.tokenId, connection.connectorId).payoff;
+    let payOff1 = TokenDAO.getConnectorByTokenId(connection.tokenId, connection.connectorId).payoff;
     let payOff2 = TokenDAO.getConnectorByTokenId(connection.oppositeTokenId, connection.oppositeConnectorId).payoff;
     console.log("Paid" + p + " " + (payOff1 + payOff2))
     p.balance += payOff1 + payOff2;
