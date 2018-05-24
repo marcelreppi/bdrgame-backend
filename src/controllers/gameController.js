@@ -54,7 +54,7 @@ function gameTick() {
 
   // 2. Generate tokens
   const k = 1 // base number of generated tokens
-  const s = PlayerDAO.getAllPlayers().length // total amount of players
+  const s = PlayerDAO.getAllPlayers().filter(p => p.isSelected).length // total amount of players
   const x = 0.95 // base probability
   const beta = 0.2 // curve parameter
   const probability = Math.pow(1 - Math.pow(x, s), beta)
