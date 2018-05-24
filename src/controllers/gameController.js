@@ -136,7 +136,7 @@ function payPayoff() {
     players.push(player);
     let payOff1 = TokenDAO.getConnectorByTokenId(connection.tokenId, connection.connectorId).payoff;
     let payOff2 = TokenDAO.getConnectorByTokenId(connection.oppositeTokenId, connection.oppositeConnectorId).payoff;
-    console.log("Paid" + p + " " + (payOff1 + payOff2))
+    console.log("Paid" + player + " " + (payOff1 + payOff2))
     p.balance += payOff1 + payOff2;
   }
   if (players.length > 0)
