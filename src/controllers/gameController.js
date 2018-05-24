@@ -127,6 +127,8 @@ function executeConnections() {
 }
 function payPayoff() {
   // payoff for connecting
+  console.log("payPayOff");
+  console.log("connectionQueue: " + connectionQueue);
   let players = [];
   for (let i = 0; i < connectionQueue; i++)  {
     let connection = connectionQueue[i];
@@ -134,10 +136,12 @@ function payPayoff() {
     players.push(player);
     let payOff1 = TokenDaO.getConnectorByTokenId(connection.tokenId, connection.connectorId).payoff;
     let payOff2 = TokenDAO.getConnectorByTokenId(connection.oppositeTokenId, connection.oppositeConnectorId).payoff;
+    console.log("Paid" + p + " " + (payOff1 + payOff2))
     p.balance += payOff1 + payOff2;
   }
   if (players.length > 0)
     webserver.sendUpdatedPlayers(players);
+  console.log('Resetting connectionQueue');
   connectionQueue = []
 }
 
