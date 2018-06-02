@@ -1,5 +1,5 @@
-BDR Game Backend
+# BDR Game Backend
 
-Setup
+### How to get the backend running
 - npm i
 - npm start
