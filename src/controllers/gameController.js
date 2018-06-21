@@ -129,6 +129,11 @@ function executeConnections() {
   for( let i = 0; i < connectionQueue.length; i++ ) {
     const connection = connectionQueue[i]
     // TODO add logic
+
+    if (!isValidRegExConnection(connection)) {
+      continue;
+    }
+
     TokenDAO.addConnection(connection)
     allowedConnections.push(connection)
     updatedTokens.push(TokenDAO.getTokenById(connection.tokenId))
@@ -168,6 +173,10 @@ function sendUpdatedTokens() {
   updatedTokens = []
 }
 
+function isValidRegExConnection(connection) {
+  // stub
+  return true;
+}
 
 exports.getRoundTime = (req, res) => {
   res.json({ roundTime, roundDuration: ROUND_DURATION })
