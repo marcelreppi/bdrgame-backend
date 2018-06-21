@@ -59,6 +59,9 @@ function gameTick() {
   const x = 0.95 // base probability
   const beta = 0.2 // curve parameter
   const probability = Math.pow(1 - Math.pow(x, s), beta)
+  const chi = 1
+  const epsilon = 0.2
+  const radius = chi*epsilon
 
   // REMOVE LATER
   // ONLY FOR DEVELOPMENT
@@ -71,7 +74,19 @@ function gameTick() {
   if (r <= probability) {
     const newTokens = []
     for (let i = 0; i < k*s; i++) {
-      const newToken = TokenDAO.createToken(Math.random(), Math.random());
+
+      let allT = TokenDAO.getAllTokens()
+      let rIndex = Math.floor(Math.random() * allT.length);
+      let someRandomToken = allT[rIndex];
+      let tx = someRandomToken.x;
+      let ty = someRandomToken.y;
+      let x = Math.random() * radius
+      x = Math.random() > 0.5 ? -x : x;
+      let yMax = Math.sqrt(radius*radius - x*x)
+      let y = Math.random() * yMax
+      y = Math.random() > 0.5 ? -y : y;
+
+      const newToken = TokenDAO.createToken(tx+x, ty+y);
       newTokens.push(newToken)
     }
     webserver.sendNewTokens(newTokens);
