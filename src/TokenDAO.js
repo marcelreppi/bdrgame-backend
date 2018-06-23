@@ -40,7 +40,7 @@ exports.wipeTokens = () => {
 exports.createToken = (x, y, connectors) => {
   connectors = []
   for (let i = 0; i < 6; i++) {
-    connectors.push(new Connector(i, 'bla', (Math.random()*15)))
+    connectors.push(new Connector(i, 'regex', (Math.random()*15)))
   }
   const newToken = new Token(x, y, connectors)
   tokens.push(newToken)
